@@ -12,7 +12,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddOptions<BlogApiJsonDirectAccessSetting>().Configure(options =>
 {
-	options.DataPath = @"..\..\..\Data\";
+	options.DataPath = @"..\..\DataBase\";
 	options.BlogPostsFolder = "BlogPosts";
 	options.TagsFolder = "Tags";
 	options.CategoriesFolder = "Categories";
@@ -42,6 +42,7 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
 	.AddInteractiveServerRenderMode()
 	.AddInteractiveWebAssemblyRenderMode()
-	.AddAdditionalAssemblies(typeof(BlazorWebApp.Client._Imports).Assembly);
+	.AddAdditionalAssemblies(typeof(BlazorWebApp.Client._Imports).Assembly) // Adding these "WASM" components allows for SSR to work in "hybrid" // Book had typeof(Counter) here as well
+	.AddAdditionalAssemblies(typeof(SharedComponents._Imports).Assembly); // the book suggested using SharedComponents.Pages.Home
 
 app.Run();
