@@ -1,0 +1,13 @@
+﻿@page "/parentcounter"
+@rendermode InteractiveAuto
+
+<h1>Parent Counter</h1>
+
+<CounterWithParameter IncrementAmmount="@incrementamount" @bind-CurrentCount="@currentcount" />
+
+<p>The current count is: @currentcount</p>
+
+@code {
+    int incrementamount = 10;
+    int currentcount = 0;
+}
