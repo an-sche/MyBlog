@@ -1,5 +1,7 @@
 ﻿@page "/Post/{BlogPostId}"
 
+@using Markdig;
+
 @inject IBlogApi _api
 @inject NavigationManager _navigation;
 
@@ -14,14 +16,23 @@
         <meta property="twitter:card" content="@(new string(BlogPost.Text.Take(100).ToArray()))"/>
     </HeadContent>
     <h2>@BlogPost.Title</h2>
-    @((MarkupString)BlogPost.Text)
+
+    @((MarkupString)Markdig.Markdown.ToHtml(BlogPost.Text, pipeline))
 }
 
 @code {
     [Parameter]
     public string BlogPostId { get; set; } = string.Empty;
-
     public BlogPost? BlogPost { get; set; }
+
+    MarkdownPipeline pipeline = default!;
+    protected override Task OnInitializedAsync()
+    {
+        pipeline = new MarkdownPipelineBuilder()
+            .UseEmojiAndSmiley()
+            .Build();
+        return base.OnInitializedAsync();
+    }
     
     protected async override Task OnParametersSetAsync() 
     {
