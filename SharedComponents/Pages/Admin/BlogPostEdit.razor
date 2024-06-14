@@ -9,12 +9,12 @@
 @inject IBlogApi _api
 @inject NavigationManager _navigation
 
-<EditForm Model="@Post" OnValidSubmit="@SavePost">
+<EditForm Model="@Post" OnValidSubmit="@SavePostAsync">
     <DataAnnotationsValidator />
     <CustomCssClassProvider ProviderType="BootstrapFieldCssClassProvider"/>
+    <BlogNavigationLock @ref="NavigationLock" />
 
-    <InputText @bind-Value="@Post.Title" />
-    <ValidationMessage For="@(()=>Post.Title)" />
+    <BlogInputText @bind-Value="@Post.Title" Label="Title" />
 
     <InputDate @bind-Value="@Post.PublishDate" />
     <ValidationMessage For="@(()=>Post.PublishDate)" />
@@ -47,7 +47,7 @@
     <InputTextAreaOnInput @bind-Value="@Post.Text" @onkeyup="@UpdateHTML" />
     <ValidationMessage For="@(() => Post.Text)" />
 
-    <button type="submit" class="btn btn-success">Save</button>
+    <BlogButton Type="BlogButton.ButtonType.Save">Save</BlogButton>
 
 </EditForm>
 
@@ -62,6 +62,8 @@
     BlogPost Post { get; set; } = new();
     List<Category> Categories { get; set; } = new();
     List<Tag> Tags { get; set; } = new();
+
+    BlogNavigationLock? NavigationLock { get; set; }
     
     string? selectedCategory = null;
     string? markDownAsHTML { get; set; }
@@ -96,8 +98,9 @@
         base.OnParametersSet();
     }
 
-    public async Task SavePost()
+    public async Task SavePostAsync()
     {
+
         if (!string.IsNullOrEmpty(selectedCategory) && Categories != null) 
         {
             var category = Categories.FirstOrDefault(c => c.Id == selectedCategory);
@@ -107,6 +110,7 @@
             }
         }
         await _api.SaveBlogPostAsync(Post);
+        NavigationLock?.CurrentEditContext.MarkAsUnmodified();
         _navigation.NavigateTo("/admin/blogposts");
     }
 
