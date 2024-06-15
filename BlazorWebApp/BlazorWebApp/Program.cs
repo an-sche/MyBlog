@@ -50,5 +50,6 @@ app.MapRazorComponents<App>()
 app.MapBlogPostApi();
 app.MapCategoryApi();
 app.MapTagApi();
+app.MapCommentApi();
 
 app.Run();
