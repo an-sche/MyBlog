@@ -1,8 +1,5 @@
 using Data;
 using Data.Models.Interfaces;
-using BlazorWebApp.Client.Pages;
-using BlazorWebApp.Components;
-using BlazorWebApp;
 using BlazorWebApp.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);

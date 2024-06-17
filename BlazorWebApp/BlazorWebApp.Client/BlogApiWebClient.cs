@@ -23,7 +23,7 @@ public class BlogApiWebClient : IBlogApi
     public async Task<int> GetBlogPostCountAsync()
     {
         var client = _factory.CreateClient("Api");
-        return await client.GetFromJsonAsync<int>($"/api/BlogPostsCount");
+        return await client.GetFromJsonAsync<int>($"/api/BlogPostCount");
     }
 
     public async Task<List<BlogPost>?> GetBlogPostsAsync(int numberOfPosts, int startIndex)
