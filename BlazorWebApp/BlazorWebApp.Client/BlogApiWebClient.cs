@@ -26,10 +26,10 @@ public class BlogApiWebClient : IBlogApi
         return await client.GetFromJsonAsync<int>($"/api/BlogPostsCount");
     }
 
-    public async Task<List<BlogPost>> GetBlogPostsAsync(int numberOfPosts, int startIndex)
+    public async Task<List<BlogPost>?> GetBlogPostsAsync(int numberOfPosts, int startIndex)
     {
         var client = _factory.CreateClient("Api");
-        return await client.GetFromJsonAsync<List<BlogPost>>($"/api/BlogPosts?numberofposts={numberOfPosts}&startindex={startIndex}") ?? [];
+        return await client.GetFromJsonAsync<List<BlogPost>>($"/api/BlogPosts?numberofposts={numberOfPosts}&startindex={startIndex}");
     }
 
     public async Task<BlogPost?> SaveBlogPostAsync(BlogPost item)
@@ -48,71 +48,132 @@ public class BlogApiWebClient : IBlogApi
         return null;
     }
 
-
-
-
-
-    public Task DeleteBlogPostAsync(string id)
+    public async Task DeleteBlogPostAsync(string id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var client = _factory.CreateClient("Api");
+            await client.DeleteAsync($"/api/BlogPosts/{id}");
+        }
+        catch (AccessTokenNotAvailableException e)
+        {
+            e.Redirect();
+        }
     }
 
-    public Task DeleteCategoryAsync(string id)
+    public async Task<List<Category>?> GetCategoriesAsync()
     {
-        throw new NotImplementedException();
+        var client = _factory.CreateClient("Api");
+        return await client.GetFromJsonAsync<List<Category>>($"/api/Categories");
     }
 
-    public Task DeleteCommentAsync(string id)
+    public async Task<Category?> GetCategoryAsync(string id)
     {
-        throw new NotImplementedException();
+        var client = _factory.CreateClient("Api");
+        return await client.GetFromJsonAsync<Category>($"/api/Categories/{id}");
     }
 
-    public Task DeleteTagAsync(string id)
+    public async Task DeleteCategoryAsync(string id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var client = _factory.CreateClient("Api");
+            await client.DeleteAsync($"/api/Categories/{id}");
+        }
+        catch (AccessTokenNotAvailableException e)
+        {
+            e.Redirect();
+        }
     }
 
-
-
-
-    public Task<List<Category>> GetCategoriesAsync()
+    public async Task<Category?> SaveCategoryAsync(Category item)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var client = _factory.CreateClient("Api");
+            var response = await client.PutAsJsonAsync($"/api/Categories", item);
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<Category>(json);            
+        }
+        catch (AccessTokenNotAvailableException e)
+        {
+            e.Redirect();
+        }
+        return null;
     }
 
-    public Task<Category?> GetCategoryAsync(string id)
+    public async Task<Tag?> GetTagAsync(string id)
     {
-        throw new NotImplementedException();
+        var client = _factory.CreateClient("Api");
+        return await client.GetFromJsonAsync<Tag>($"/api/Tags/{id}");
+    }
+    public async Task<List<Tag>?> GetTagsAsync()
+    {
+        var client = _factory.CreateClient("Api");
+        return await client.GetFromJsonAsync<List<Tag>>($"/api/Tags");
     }
 
-    public Task<List<Comment>> GetCommentsAsync(string blogPostId)
+    public async Task DeleteTagAsync(string id)
     {
-        throw new NotImplementedException();
+        try 
+        {
+            var client = _factory.CreateClient("Api");
+            await client.DeleteAsync($"/api/Tags/{id}");
+        }
+        catch (AccessTokenNotAvailableException e)
+        {
+            e.Redirect();
+        }
     }
 
-    public Task<Tag?> GetTagAsync(string id)
+    public async Task<Tag?> SaveTagAsync(Tag item)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var client = _factory.CreateClient("Api");
+            var response = await client.PutAsJsonAsync($"/api/Tags", item);
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<Tag>(json);
+        }
+        catch (AccessTokenNotAvailableException e)
+        {
+            e.Redirect();
+        }
+        return null;
     }
 
-    public Task<List<Tag>> GetTagsAsync()
+    public async Task<List<Comment>?> GetCommentsAsync(string blogPostId)
     {
-        throw new NotImplementedException();
+        var client = _factory.CreateClient("Api");
+        return await client.GetFromJsonAsync<List<Comment>>($"/api/Comments/{blogPostId}");
     }
 
-
-    public Task<Category?> SaveCategoryAsync(Category item)
+    public async Task<Comment?> SaveCommentAsync(Comment item)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var client = _factory.CreateClient("Api");
+            var response = await client.PutAsJsonAsync($"/api/Comments", item);
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<Comment>(json);            
+        }
+        catch (AccessTokenNotAvailableException e)
+        {
+            e.Redirect();
+        }
+        return null;
     }
 
-    public Task<Comment?> SaveCommentAsync(Comment item)
+    public async Task DeleteCommentAsync(string id)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<Tag?> SaveTagAsync(Tag item)
-    {
-        throw new NotImplementedException();
+        try
+        {
+            var client = _factory.CreateClient("Api");            
+            await client.DeleteAsync($"/api/Comments/{id}");
+        }
+        catch (AccessTokenNotAvailableException e)
+        {
+            e.Redirect();
+        }
     }
 }

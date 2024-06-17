@@ -3,10 +3,10 @@
 public interface IBlogApi
 {
     Task<int> GetBlogPostCountAsync();
-    Task<List<BlogPost>> GetBlogPostsAsync(int numberOfPosts, int startIndex);
-    Task<List<Category>> GetCategoriesAsync();
-    Task<List<Tag>> GetTagsAsync();
-    Task<List<Comment>> GetCommentsAsync(string blogPostId);
+    Task<List<BlogPost>?> GetBlogPostsAsync(int numberOfPosts, int startIndex);
+    Task<List<Category>?> GetCategoriesAsync();
+    Task<List<Tag>?> GetTagsAsync();
+    Task<List<Comment>?> GetCommentsAsync(string blogPostId);
     Task<BlogPost?> GetBlogPostAsync(string id);
     Task<Category?> GetCategoryAsync(string id);
     Task<Tag?> GetTagAsync(string id);
