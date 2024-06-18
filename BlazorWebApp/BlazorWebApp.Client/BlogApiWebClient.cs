@@ -26,10 +26,10 @@ public class BlogApiWebClient : IBlogApi
         return await client.GetFromJsonAsync<int>($"/api/BlogPostCount");
     }
 
-    public async Task<List<BlogPost>?> GetBlogPostsAsync(int numberOfPosts, int startIndex)
+    public async Task<List<BlogPost>> GetBlogPostsAsync(int numberOfPosts, int startIndex)
     {
         var client = _factory.CreateClient("Api");
-        return await client.GetFromJsonAsync<List<BlogPost>>($"/api/BlogPosts?numberofposts={numberOfPosts}&startindex={startIndex}");
+        return await client.GetFromJsonAsync<List<BlogPost>>($"/api/BlogPosts?numberofposts={numberOfPosts}&startindex={startIndex}") ?? [];
     }
 
     public async Task<BlogPost?> SaveBlogPostAsync(BlogPost item)
@@ -61,10 +61,10 @@ public class BlogApiWebClient : IBlogApi
         }
     }
 
-    public async Task<List<Category>?> GetCategoriesAsync()
+    public async Task<List<Category>> GetCategoriesAsync()
     {
         var client = _factory.CreateClient("Api");
-        return await client.GetFromJsonAsync<List<Category>>($"/api/Categories");
+        return await client.GetFromJsonAsync<List<Category>>($"/api/Categories") ?? [];
     }
 
     public async Task<Category?> GetCategoryAsync(string id)
@@ -107,10 +107,10 @@ public class BlogApiWebClient : IBlogApi
         var client = _factory.CreateClient("Api");
         return await client.GetFromJsonAsync<Tag>($"/api/Tags/{id}");
     }
-    public async Task<List<Tag>?> GetTagsAsync()
+    public async Task<List<Tag>> GetTagsAsync()
     {
         var client = _factory.CreateClient("Api");
-        return await client.GetFromJsonAsync<List<Tag>>($"/api/Tags");
+        return await client.GetFromJsonAsync<List<Tag>>($"/api/Tags") ?? [];
     }
 
     public async Task DeleteTagAsync(string id)
@@ -142,10 +142,10 @@ public class BlogApiWebClient : IBlogApi
         return null;
     }
 
-    public async Task<List<Comment>?> GetCommentsAsync(string blogPostId)
+    public async Task<List<Comment>> GetCommentsAsync(string blogPostId)
     {
         var client = _factory.CreateClient("Api");
-        return await client.GetFromJsonAsync<List<Comment>>($"/api/Comments/{blogPostId}");
+        return await client.GetFromJsonAsync<List<Comment>>($"/api/Comments/{blogPostId}") ?? [];
     }
 
     public async Task<Comment?> SaveCommentAsync(Comment item)

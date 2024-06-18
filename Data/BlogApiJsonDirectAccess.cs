@@ -7,7 +7,7 @@ namespace Data;
 
 public class BlogApiJsonDirectAccess : IBlogApi
 {
-    BlogApiJsonDirectAccessSetting _settings;
+    private readonly BlogApiJsonDirectAccessSetting _settings;
 
     public BlogApiJsonDirectAccess(IOptions<BlogApiJsonDirectAccessSetting> options)
     {

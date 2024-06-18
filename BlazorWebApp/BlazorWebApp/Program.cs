@@ -1,5 +1,7 @@
 using Data;
 using Data.Models.Interfaces;
+using BlazorWebApp.Client.Pages;
+using BlazorWebApp.Components;
 using BlazorWebApp.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,7 +44,9 @@ app.MapRazorComponents<App>()
 	.AddInteractiveServerRenderMode()
 	.AddInteractiveWebAssemblyRenderMode()
 	.AddAdditionalAssemblies(typeof(BlazorWebApp.Client._Imports).Assembly) // Adding these "WASM" components allows for SSR to work in "hybrid" // Book had typeof(Counter) here as well
+	// .AddAdditionalAssemblies(typeof(Counter).Assembly)
 	.AddAdditionalAssemblies(typeof(SharedComponents._Imports).Assembly); // the book suggested using SharedComponents.Pages.Home
+	// comment
 
 app.MapBlogPostApi();
 app.MapCategoryApi();
