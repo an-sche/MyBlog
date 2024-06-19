@@ -4,6 +4,12 @@ using BlazorWebApp.Client.Pages;
 using BlazorWebApp.Components;
 using BlazorWebApp.Endpoints;
 
+using BlazorWebApp;
+using Auth0.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Components.Authorization;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -20,6 +26,14 @@ builder.Services.AddOptions<BlogApiJsonDirectAccessSetting>().Configure(options 
 	options.CommentsFolder = "Comments";
 });
 builder.Services.AddScoped<IBlogApi, BlogApiJsonDirectAccess>();
+
+builder.Services.AddScoped<AuthenticationStateProvider, PersistingServerAuthenticationSateProvider>();
+builder.Services.AddCascadingAuthenticationState();
+builder.Services.AddAuth0WebAppAuthentication(options => 
+{
+	options.Domain = builder.Configuration["Auth0:Authority"] ?? string.Empty;
+	options.ClientId = builder.Configuration["Auth0:ClientId"] ?? string.Empty;
+});
 
 var app = builder.Build();
 
@@ -40,6 +54,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAntiforgery();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapRazorComponents<App>()
 	.AddInteractiveServerRenderMode()
 	.AddInteractiveWebAssemblyRenderMode()
@@ -52,5 +69,24 @@ app.MapBlogPostApi();
 app.MapCategoryApi();
 app.MapTagApi();
 app.MapCommentApi();
+
+app.MapGet("account/login", async (string returnUrl, HttpContext context) => {
+	var authenticationProperties = new LoginAuthenticationPropertiesBuilder()
+		.WithRedirectUri(returnUrl)
+		.Build();
+
+	await context.ChallengeAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
+});
+
+app.MapGet("authentication/logout", async (HttpContext context) => {
+	var authenticationProperties = new LoginAuthenticationPropertiesBuilder()
+		.WithRedirectUri("/")
+		.Build();
+	await context.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
+	await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+});
+
+
+
 
 app.Run();

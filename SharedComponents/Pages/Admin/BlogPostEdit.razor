@@ -1,13 +1,13 @@
 ﻿@page "/admin/blogposts/new"
 @page "/admin/blogposts/{Id}"
 @rendermode InteractiveServer
+@inject IBlogApi _api
+@inject NavigationManager _navigation
 
 @using Markdig;
 @using Microsoft.AspNetCore.Components.Forms
-@using SharedComponents.ReusableComponents
 
-@inject IBlogApi _api
-@inject NavigationManager _navigation
+@attribute [Authorize]
 
 <EditForm Model="@Post" OnValidSubmit="@SavePostAsync">
     <DataAnnotationsValidator />

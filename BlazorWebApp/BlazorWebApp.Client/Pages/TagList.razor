@@ -1,8 +1,8 @@
 ﻿@page "/admin/tags"
-@rendermode InteractiveServer
+@rendermode InteractiveAuto
 
-@using SharedComponents.ReusableComponents
 @inject IBlogApi _api
+@attribute [Authorize]
 
 <h3>Tags</h3>
 
