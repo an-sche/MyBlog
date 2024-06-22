@@ -50,13 +50,13 @@ public class BlogApiJsonDirectAccess : IBlogApi
 
     private async Task SaveAsync<T>(string folder, string fileName, T item) 
     {
-        var filepath = $@"{_settings.DataPath}\{folder}\{fileName}";
+        var filepath = $@"{_settings.DataPath}\{folder}\{fileName}.json";
         await File.WriteAllTextAsync(filepath, JsonSerializer.Serialize(item));
     }
 
     private Task DeleteAsync(string folder, string fileName) 
     {
-        var filepath = $@"{_settings.DataPath}\{folder}\{fileName}";
+        var filepath = $@"{_settings.DataPath}\{folder}\{fileName}.json";
         if (File.Exists(filepath)) 
         {
             File.Delete(filepath);

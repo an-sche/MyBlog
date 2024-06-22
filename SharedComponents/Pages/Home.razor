@@ -1,19 +1,31 @@
 @page "/"
 @rendermode InteractiveServer // maybe change later when we have built the api (and can use WASM)
 
+@using Markdig;
 @using Data.Models.Interfaces
 @using Data.Models
 
 @inject IBlogApi _api
 
-<ul>
-    <Virtualize ItemsProvider="LoadPosts" Context="p">
-        <li><a href="/Post/@p.Id">@p.Title</a></li>
-    </Virtualize>
-</ul>
+<Virtualize ItemsProvider="LoadPosts" Context="p">
+    @* <li><a href="/Post/@p.Id">@p.Title</a></li> *@
+    <article>
+        <h2>@p.Title</h2>
+        @((MarkupString)Markdig.Markdown.ToHtml(new string(p.Text.Take(100).ToArray()), pipeline))
+        <a href="/Post/@p.Id">Read more</a>
+    </article>
+</Virtualize>
 
 @code {
     public int TotalBlogPosts { get; set; }
+    MarkdownPipeline pipeline;
+    protected override Task OnInitializedAsync()
+    {
+        pipeline = new MarkdownPipelineBuilder()
+            .UseEmojiAndSmiley()
+            .Build();
+        return base.OnInitializedAsync();
+    }
     
     private async ValueTask<ItemsProviderResult<BlogPost>> LoadPosts(ItemsProviderRequest request) 
     {

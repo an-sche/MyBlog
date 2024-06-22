@@ -32,7 +32,7 @@ else
     private List<BlogPost>? posts = null;
     protected override async Task OnInitializedAsync()
     {
-        await Task.Delay(1000);
+        await Task.Delay(500);
         var numberOfPosts = await _api.GetBlogPostCountAsync();
         posts = await _api.GetBlogPostsAsync(numberOfPosts, 0);
         await base.OnInitializedAsync();
