@@ -10,7 +10,7 @@ public static class CommentEndpoints
     {
         app.MapGet("/api/Comments/{*blogPostId}", async (IBlogApi api, string blogPostId) => {
             return Results.Ok(await api.GetCommentsAsync(blogPostId));
-        }).RequireAuthorization();
+        });
 
         app.MapPut("/api/Comments", async (IBlogApi api, [FromBody]Comment item) => {
             return Results.Ok(await api.SaveCommentAsync(item));

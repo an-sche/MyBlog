@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
 
-namespace SharedComponents.ReusableComponents;
+namespace SharedComponents;
 
 public class BootstrapFieldCssClassProvider : FieldCssClassProvider
 {

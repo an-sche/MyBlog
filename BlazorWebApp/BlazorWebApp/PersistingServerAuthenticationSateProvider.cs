@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
-namespace BlazorWebApp;
+namespace BlazorWebApp.Client;
 
 internal sealed class PersistingServerAuthenticationSateProvider : ServerAuthenticationStateProvider, IDisposable
 {

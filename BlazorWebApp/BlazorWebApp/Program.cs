@@ -4,7 +4,7 @@ using BlazorWebApp.Client.Pages;
 using BlazorWebApp.Components;
 using BlazorWebApp.Endpoints;
 
-using BlazorWebApp;
+using BlazorWebApp.Client;
 using Auth0.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -17,6 +17,8 @@ builder.Services.AddRazorComponents()
 	.AddInteractiveServerComponents()
 	.AddInteractiveWebAssemblyComponents();
 
+// builder.Services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
+
 builder.Services.AddOptions<BlogApiJsonDirectAccessSetting>().Configure(options =>
 {
 	options.DataPath = @"..\..\DataBase";
@@ -25,8 +27,8 @@ builder.Services.AddOptions<BlogApiJsonDirectAccessSetting>().Configure(options 
 	options.CategoriesFolder = "Categories";
 	options.CommentsFolder = "Comments";
 });
-builder.Services.AddScoped<IBlogApi, BlogApiJsonDirectAccess>();
 
+builder.Services.AddScoped<IBlogApi, BlogApiJsonDirectAccess>();
 builder.Services.AddScoped<AuthenticationStateProvider, PersistingServerAuthenticationSateProvider>();
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddAuth0WebAppAuthentication(options => 
@@ -60,9 +62,11 @@ app.UseAuthorization();
 app.MapRazorComponents<App>()
 	.AddInteractiveServerRenderMode()
 	.AddInteractiveWebAssemblyRenderMode()
-	.AddAdditionalAssemblies(typeof(BlazorWebApp.Client._Imports).Assembly) // Adding these "WASM" components allows for SSR to work in "hybrid" // Book had typeof(Counter) here as well
-	// .AddAdditionalAssemblies(typeof(Counter).Assembly)
-	.AddAdditionalAssemblies(typeof(SharedComponents._Imports).Assembly); // the book suggested using SharedComponents.Pages.Home
+    .AddAdditionalAssemblies(typeof(Counter).Assembly)
+    .AddAdditionalAssemblies(typeof(SharedComponents.Pages.Home).Assembly);
+	//.AddAdditionalAssemblies(typeof(BlazorWebApp.Client._Imports).Assembly) // Adding these "WASM" components allows for SSR to work in "hybrid" // Book had typeof(Counter) here as well
+	//.AddAdditionalAssemblies(typeof(Counter).Assembly)
+	//.AddAdditionalAssemblies(typeof(SharedComponents._Imports).Assembly); // the book suggested using SharedComponents.Pages.Home
 	// comment
 
 app.MapBlogPostApi();
@@ -85,7 +89,6 @@ app.MapGet("authentication/logout", async (HttpContext context) => {
 	await context.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
 	await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 });
-
 
 
 
