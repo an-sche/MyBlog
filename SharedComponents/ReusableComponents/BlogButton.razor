@@ -1,4 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
+
+@implements IAsyncDisposable
 @inject IJSRuntime JSRuntime
 
 <button type="@InternalButtonType" diabled="@Disabled" class="@InternalCssClass" title="@Title" @onclick="@OnButtonClick">@ChildContent</button>
@@ -53,7 +55,7 @@
     }
 
     private string? Title => Disabled && !string.IsNullOrWhiteSpace(DisabledHelpText) ? DisabledHelpText : HelpText;
-    
+
     [Parameter]
     public string? DisabledHelpText 
     { 
@@ -106,18 +108,30 @@
     }
 
     IJSObjectReference? jsmodule;
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            jsmodule = await JSRuntime.InvokeAsync<IJSObjectReference>("import",
+                "./_content/SharedComponents/ReusableComponents/BlogButton.razor.js");      
+        }
+    }
+
     [Parameter]
     public string? ConfirmMessage { get; set; } = null;
     private async Task<bool> ShouldExecute()
     {
-        if (ConfirmMessage != null)
-        {
-            jsmodule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/SharedComponents/ReusableComponents/BlogButton.razor.js");
-            return await jsmodule.InvokeAsync<bool>("showConfirm", ConfirmMessage);
-        }
-        else
-        {
+        if (ConfirmMessage is null || jsmodule is null)
             return true;
+
+        return await jsmodule.InvokeAsync<bool>("showConfirm", ConfirmMessage);
+    }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        if (jsmodule is not null)
+        {
+            await jsmodule.DisposeAsync();
         }
     }
 }
