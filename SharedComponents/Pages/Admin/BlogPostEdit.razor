@@ -1,10 +1,14 @@
 ﻿@page "/admin/blogposts/new"
 @page "/admin/blogposts/{Id}"
-@rendermode InteractiveServer
+@* @rendermode @(new InteractiveServerRenderMode(prerender: false)) *@
+@rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
+
+@inject IBrowserStorage _storage
 @inject IBlogApi _api
 @inject NavigationManager _navigation
 
 @using Markdig;
+@using SharedComponents.Interfaces;
 @using Microsoft.AspNetCore.Components.Forms
 
 @attribute [Authorize]
@@ -44,7 +48,7 @@
         }
     </ul>
     
-    <InputTextAreaOnInput @bind-Value="@Post.Text" @onkeyup="@UpdateHTML" />
+    <InputTextAreaOnInput @bind-Value="@Post.Text" @onkeyup="@UpdateHtmlAsync" />
     <ValidationMessage For="@(() => Post.Text)" />
 
     <BlogButton Type="BlogButton.ButtonType.Save">Save</BlogButton>
@@ -89,13 +93,27 @@
                 {
                     selectedCategory = Post.Category.Id;
                 }
-                UpdateHTML();
+                await UpdateHtmlAsync();
             }
         }
 
         Categories = await _api.GetCategoriesAsync();
         Tags = await _api.GetTagsAsync();
         base.OnParametersSet();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) 
+    {
+        if (firstRender && string.IsNullOrEmpty(Id)) 
+        {
+            var saved = await _storage.GetAsync<BlogPost>("EditCurrentPost");
+            if (saved != null) 
+            {
+                Post = saved;
+                StateHasChanged();
+            }
+        }
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     public async Task SavePostAsync()
@@ -114,8 +132,15 @@
         _navigation.NavigateTo("/admin/blogposts");
     }
 
-    protected void UpdateHTML()
+    protected async Task UpdateHtmlAsync()
     {
-        markDownAsHTML = Markdig.Markdown.ToHtml(Post.Text, pipeline);
+        if (!string.IsNullOrEmpty(Post.Text)) 
+        {
+            markDownAsHTML = Markdig.Markdown.ToHtml(Post.Text, pipeline);
+            if (string.IsNullOrEmpty(Post.Id))
+            {
+                await _storage.SetAsync("EditCurrentPost", Post);
+            }
+        }
     }
 }

@@ -1,14 +1,17 @@
 using Data;
 using Data.Models.Interfaces;
-using BlazorWebApp.Client.Pages;
 using BlazorWebApp.Components;
 using BlazorWebApp.Endpoints;
+using BlazorWebApp.Client.Pages;
 
 using BlazorWebApp.Client;
 using Auth0.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
+
+using SharedComponents.Interfaces;
+using BlazorWebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +21,7 @@ builder.Services.AddRazorComponents()
 	.AddInteractiveWebAssemblyComponents();
 
 // builder.Services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
+builder.Services.AddScoped<IBrowserStorage, BlogProtectedBrowserStorage>();
 
 builder.Services.AddOptions<BlogApiJsonDirectAccessSetting>().Configure(options =>
 {
