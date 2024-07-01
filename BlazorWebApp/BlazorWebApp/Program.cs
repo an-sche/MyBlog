@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 using SharedComponents.Interfaces;
 using BlazorWebApp.Services;
+using BlazorWebApp.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
 	.AddInteractiveServerComponents()
 	.AddInteractiveWebAssemblyComponents();
+
+builder.Services.AddSignalR();
 
 // builder.Services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
 builder.Services.AddScoped<IBrowserStorage, BlogProtectedBrowserStorage>();
@@ -41,6 +44,8 @@ builder.Services.AddAuth0WebAppAuthentication(options =>
 	options.ClientId = builder.Configuration["Auth0:ClientId"] ?? string.Empty;
 });
 
+builder.Services.AddSingleton<IBlogNotificationService, BlazorServerBlogNotificationService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -62,6 +67,8 @@ app.UseAntiforgery();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapHub<BlogNotificationHub>("/BlogNotificationHub");
 
 app.MapRazorComponents<App>()
 	.AddInteractiveServerRenderMode()

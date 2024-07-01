@@ -3,6 +3,7 @@
 @* @rendermode @(new InteractiveServerRenderMode(prerender: false)) *@
 @rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
 
+@inject IBlogNotificationService _notification
 @inject IBrowserStorage _storage
 @inject IBlogApi _api
 @inject NavigationManager _navigation
@@ -68,7 +69,7 @@
     List<Tag> Tags { get; set; } = new();
 
     BlogNavigationLock? NavigationLock { get; set; }
-    
+
     string? selectedCategory = null;
     string? markDownAsHTML { get; set; }
 
@@ -136,6 +137,7 @@
     {
         if (!string.IsNullOrEmpty(Post.Text)) 
         {
+            await _notification.SendNotification(Post);
             markDownAsHTML = Markdig.Markdown.ToHtml(Post.Text, pipeline);
             if (string.IsNullOrEmpty(Post.Id))
             {
