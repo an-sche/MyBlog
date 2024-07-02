@@ -1,0 +1,3 @@
+﻿@page "/ThrowException"
+
+<button @onclick="@(() => { throw new Exception("Something broke"); })">Throw Exception</button>

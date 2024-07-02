@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWebApp", "BlazorWebApp\BlazorWebApp\BlazorWebApp.csproj", "{D6D4409C-6A49-483E-81E4-C52E01E63CB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWebApp", "BlazorWebApp\BlazorWebApp\BlazorWebApp.csproj", "{D6D4409C-6A49-483E-81E4-C52E01E63CB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWebApp.Client", "BlazorWebApp\BlazorWebApp.Client\BlazorWebApp.Client.csproj", "{335D6AA1-41D4-405A-9485-BFD3B15D307C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWebApp.Client", "BlazorWebApp\BlazorWebApp.Client\BlazorWebApp.Client.csproj", "{335D6AA1-41D4-405A-9485-BFD3B15D307C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{6613B364-26E9-4976-AC60-FF95A98B0063}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{6613B364-26E9-4976-AC60-FF95A98B0063}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Models", "Data.Models\Data.Models.csproj", "{B1067C65-43BC-43B1-BD1B-39464FFE8704}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Models", "Data.Models\Data.Models.csproj", "{B1067C65-43BC-43B1-BD1B-39464FFE8704}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedComponents", "SharedComponents\SharedComponents.csproj", "{8064C329-C09F-4ABE-8E6E-A4BE8B2787EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedComponents", "SharedComponents\SharedComponents.csproj", "{8064C329-C09F-4ABE-8E6E-A4BE8B2787EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWebAssemblyApp", "BlazorWebApp\BlazorWebAssemblyApp\BlazorWebAssemblyApp.csproj", "{2BE670DA-8D92-4976-BE2E-5F2316E55E4A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{8064C329-C09F-4ABE-8E6E-A4BE8B2787EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8064C329-C09F-4ABE-8E6E-A4BE8B2787EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8064C329-C09F-4ABE-8E6E-A4BE8B2787EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BE670DA-8D92-4976-BE2E-5F2316E55E4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BE670DA-8D92-4976-BE2E-5F2316E55E4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BE670DA-8D92-4976-BE2E-5F2316E55E4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BE670DA-8D92-4976-BE2E-5F2316E55E4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

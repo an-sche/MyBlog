@@ -1,0 +1,8 @@
+﻿@page "/ThrowException"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<button @onclick="@(() => { throw new Exception("Something broke"); })">Throw Exception</button>
+
+@code {
+
+}
