@@ -9,7 +9,7 @@
     @* <li><a href="/Post/@p.Id">@p.Title</a></li> *@
     <article>
         <h2>@p.Title</h2>
-        @((MarkupString)Markdig.Markdown.ToHtml(new string(p.Text.Take(100).ToArray()), pipeline))
+        @((MarkupString)Markdig.Markdown.ToHtml(new string(p.Text.Take(100).Append('.').Append('.').Append('.').ToArray()), pipeline))
         <a href="/Post/@p.Id">Read more</a>
     </article>
 </Virtualize>

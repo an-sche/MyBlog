@@ -1,0 +1,26 @@
+﻿@inherits TestContext
+
+@code {
+
+    [Fact]
+    public void LoginStatus_WhenNotAuthorized_ShouldShowLogin()
+    {
+        this.AddTestAuthorization();
+
+        var cut = Render(@<LoginStatus />);
+
+        Assert.Equal("Log in", cut.Find("a").InnerHtml);
+    }
+
+    [Fact]
+    public void LoginStatus_WhenAuthorized_ShouldShowLogoff()
+    {
+        var auth = this.AddTestAuthorization();
+        auth.SetAuthorized("TestUser", AuthorizationState.Authorized);
+
+        var cut = Render(@<LoginStatus />);
+
+        Assert.Equal("Log out", cut.Find("a").InnerHtml);
+    }
+
+}

@@ -1,0 +1,18 @@
+﻿@inherits TestContext
+
+@code {
+
+    public HomeTest()
+    {
+        Services.AddScoped<IBlogApi, BlogApiMock>();
+    }
+
+    //[Fact(DisplayName = "Checks that the Home component shows 10 posts")]
+    [Fact]
+    public void Home_WhenShowing_Displays10BlogPosts()
+    {
+        var cut = Render(@<Home />);
+
+        Assert.Equal(10, cut.FindAll("article").Count);
+    }
+}
