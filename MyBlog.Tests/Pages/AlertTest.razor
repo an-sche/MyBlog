@@ -4,7 +4,7 @@
     [Fact]
     public void Alert_WhenPrimaryStylePicked_ShouldShowPrimayAlertClass()
     {
-        Alert.AlertStyle style = Alert.AlertStyle.Primary;
+        var style = Alert.AlertStyle.Primary;
         var cut = Render(
             @<Alert Style="@style">
                 <ChildContent>
@@ -14,5 +14,20 @@
             );
 
         cut.MarkupMatches("""<div class="alert alert-primary" role="alert"><b>ChildContent fragment</b></div>""");
+    }
+
+    [Fact]
+    public void Alert_WhenDangerStylePicked_ShouldShowDangerAlertClass()
+    {
+        var style = Alert.AlertStyle.Danger;
+        var cut = Render(
+            @<Alert Style="@style">
+                <ChildContent>
+                    <b>ChildContent fragment</b>
+                </ChildContent>
+            </Alert>
+            );
+
+        cut.MarkupMatches("""<div class="alert alert-danger" role="alert"><b>ChildContent fragment</b></div>""");
     }
 }

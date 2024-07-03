@@ -1,0 +1,31 @@
+﻿@inherits TestContext
+
+@code {
+    [Fact]
+    public void BlogButton_WhenShowConfirmCalled_ShouldJsInteropInvokeShowConfirm()
+    {
+        var moduleInterop = JSInterop.SetupModule("./_content/SharedComponents/ReusableComponents/BlogButton.razor.js");
+        moduleInterop.Setup<bool>("showConfirm", "Are you sure?").SetResult(true);
+
+        var cut = Render(@<BlogButton OnClick="()=>{}" ConfirmMessage="Are you sure?"/>);
+        var buttons = cut.FindAll("button");
+        buttons.First().Click();
+
+        JSInterop.VerifyInvoke("showConfirm");
+    }
+
+    [Fact]
+    public void BlogButton_WhenTypeSave_ShouldShowBtnSuccessClass() 
+    {
+        var moduleInterop = JSInterop.SetupModule("./_content/SharedComponents/ReusableComponents/BlogButton.razor.js");
+        moduleInterop.Setup<bool>("showConfirm", "Are you sure?").SetResult(true);
+
+        var cut = Render(@<BlogButton Type="@BlogButton.ButtonType.Save" />);
+
+        var button = cut.Find("button");
+        Assert.Equal("btn btn-success", button.ClassName);
+        // var buttonType = button.Attributes.First(x => x.Name == "type");
+        // Assert.Equal("submit", buttonType.Value);
+        // cut.MarkupMatches("""<button type="submit" class="btn btn-success" blazor:onclick="1">ButtonText</button>""");
+    }
+}
